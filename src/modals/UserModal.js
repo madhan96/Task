@@ -11,7 +11,9 @@ import {
     FormControlLabel,
     MenuItem
 } from '@material-ui/core';
-import { createUser, editUser } from '../services/service-calls';
+import {editUserList} from '../actions/userdata'
+import {createUser} from '../services/service-calls';
+import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 
 const styles = makeStyles((theme) => ({
@@ -45,6 +47,8 @@ export default function  UserModal(props){
     const [gender,setGender]=useState("male");
     const [status,setStatus]=useState("inactive");
 
+    const dispatch = useDispatch(); 
+
     useEffect(()=>{
         if(Object.keys(props.user).length > 0){
             setName(props.user.name);
@@ -62,6 +66,10 @@ export default function  UserModal(props){
     const handleClose = () => {
         props.handleClose();
     };
+    const editUser=(user)=>{
+        dispatch(editUserList(user));
+        props.handleClose();
+    }
 
     const handleSubmitData = (event) => {
         if (!Object.keys(props.user).length > 0) {
@@ -70,7 +78,7 @@ export default function  UserModal(props){
             }
         }
         if (Object.keys(props.user).length > 0) {
-            editUser(props.user.id,{  name,email,status,gender,id: props.user.id }, () => { window.location.reload(); }, handleClose);
+            editUser({ name,email,status,gender,id: props.user.id });
         } else createUser({ name,email,status,gender }, () => { window.location.reload(); }, handleClose);
     }
     const handleSwitchChange = (event) => {

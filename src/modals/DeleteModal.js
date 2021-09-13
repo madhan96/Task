@@ -3,12 +3,14 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { DialogTitle, DialogContentText } from '@material-ui/core';
-import { deleteUser } from '../services/service-calls'
+import {deleteUserInList} from '../actions/userdata'
 import {
     Grid,
     Button
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { useDispatch } from 'react-redux';
+
 
 const styles = makeStyles((theme) => ({
     root: {
@@ -24,19 +26,14 @@ const styles = makeStyles((theme) => ({
 }));
 
 export default function DeleteModal(props) {
-
-    const handleCloseModal = () => {
-
-            const id = props.user.id;
-            deleteUser(id,{ id }, () => { window.location.reload(); }, props.handleClose);
-      
-    };
-
-    const handleSubmit = () => {
-        handleCloseModal();
+    const dispatch=useDispatch()
+    const deleteUser=()=>{
+        dispatch(deleteUserInList(props.user));
+        props.handleClose();
     }
-
-
+    const handleSubmit = () => {
+        deleteUser();
+    }
     const classes = styles()
     return (
         <div>
